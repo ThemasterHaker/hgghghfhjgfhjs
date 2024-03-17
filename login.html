@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hacker Login</title>
+<style>
+  body {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #000;
+    color: #0f0;
+    text-align: center;
+    padding: 50px;
+    background-image: url('https://i.imgur.com/S3C3QeN.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+  h1 {
+    color: #0f0;
+    text-shadow: 2px 2px 4px #000;
+  }
+  input[type="text"], input[type="password"], input[type="number"] {
+    width: 250px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    border: 1px solid #0f0;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #0f0;
+    outline: none;
+  }
+  input[type="text"]::placeholder, input[type="password"]::placeholder, input[type="number"]::placeholder {
+    color: #0f0;
+  }
+  input[type="submit"] {
+    padding: 10px 20px;
+    margin-top: 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: #0f0;
+    color: #000;
+    cursor: pointer;
+  }
+  input[type="submit"]:hover {
+    background-color: #090;
+  }
+  #loginForm {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #0f0;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  #showPasswordLabel {
+    color: #0f0;
+    cursor: pointer;
+  }
+  #showPasswordLabel:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+<h1>Hacker Login</h1>
+<div id="loginForm">
+  <form onsubmit="return validateForm()">
+    <input type="text" id="username" name="username" placeholder="Username" required><br>
+    <input type="password" id="password" name="password" placeholder="Password" required>
+    <input type="checkbox" id="showPassword">
+    <label for="showPassword" id="showPasswordLabel">Show Password</label><br>
+    <input type="number" id="entryCode" name="entryCode" placeholder="Entry Code" required><br>
+    <input type="submit" value="Login">
+  </form>
+</div>
+<div id="timer" style="display: none;"></div>
+<script>
+var remainingAttempts = 3; // Number of allowed attempts
+var cooldownTime = 5 * 60; // 5 minutes in seconds
+
+function validateForm() {
+  var username = document.getElementById("username").value;
+  var password = document.getElementById("password").value;
+  var entryCode = document.getElementById("entryCode").value;
+  
+  if (username === "hacker" && password === "password" && entryCode === "1234") {
+    window.location.href = "dashboard.html"; // Redirect to dashboard page
+    return false; // Prevent form submission
+  } else {
+    remainingAttempts--;
+    if (remainingAttempts === 0) {
+      startCooldown();
+    } else {
+      alert("Invalid credentials. Attempts left: " + remainingAttempts);
+    }
+    return false; // Prevent form submission
+  }
+}
+
+function startCooldown() {
+  var timerElement = document.getElementById("timer");
+  timerElement.style.display = "block";
+  var countdown = cooldownTime;
+  var timerInterval = setInterval(function() {
+    var minutes = Math.floor(countdown / 60);
+    var seconds = countdown % 60;
+    timerElement.innerHTML = "You've reached the maximum attempts. Please wait " + minutes + " minutes and " + seconds + " seconds before trying again.";
+    countdown--;
+    if (countdown < 0) {
+      clearInterval(timerInterval);
+      timerElement.style.display = "none";
+      remainingAttempts = 3; // Reset remaining attempts
+    }
+  }, 1000);
+}
+</script>
+</body>
+</html>
